@@ -14,7 +14,8 @@ export default function Signup() {
 
   const router = useRouter();
 
-  const onLogin = async () => {
+  // register
+  const onRegister = async () => {
     try {
       await axios
         .post("http://localhost:5000/api/users/signup", {
@@ -32,6 +33,7 @@ export default function Signup() {
     }
   };
 
+  // disable button if fields are empty
   useEffect(() => {
     if (email.length > 0 && password.length > 0 && name.length > 0) {
       setButtonDisabled(false);
@@ -117,7 +119,7 @@ export default function Signup() {
             </div>
 
             <button
-              onClick={onLogin}
+              onClick={onRegister}
               disabled={buttonDisabled}
               className="w-full text-white  bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-75 disabled:hover:bg-primary-600 "
             >
