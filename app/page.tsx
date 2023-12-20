@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +10,8 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  const router = useRouter();
 
   const onLogin = async () => {
     try {
@@ -20,6 +23,9 @@ export default function Home() {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user", JSON.stringify(res.data.user));
+          if (typeof window !== "undefined") {
+            router.replace("/home");
+          }
         });
     } catch (error: any) {
       toast.error("Login failed");
