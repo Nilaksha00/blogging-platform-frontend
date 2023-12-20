@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { isAuthenticated, redirectToErrorPage } from "../authMiddleware";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AddBlog() {
   const [title, setTitle] = useState("");
@@ -96,7 +97,25 @@ function AddBlog() {
         >
           Add Blog
         </button>
+        <button
+          onClick={() => router.push("/home")}
+          className="mx-4 my-6 text-white  bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-12 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-75 disabled:hover:bg-primary-600 "
+        >
+          Cancel
+        </button>
       </div>
+      <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={false}
+          pauseOnHover={false}
+          theme="dark"
+        />
     </div>
   );
 }
