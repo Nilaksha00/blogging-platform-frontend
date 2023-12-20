@@ -2,8 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { isAuthenticated, redirectToErrorPage } from "../authMiddleware";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   const [blogs, setBlogs] = useState([]);
 
   const token = localStorage?.getItem("token");
@@ -11,6 +14,7 @@ export default function Home() {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
+
   useEffect(() => {
     if (!isAuthenticated()) {
       redirectToErrorPage();
@@ -37,9 +41,24 @@ export default function Home() {
     setBlogs(newBlogs);
   };
 
+  const handleAddBlogButton = () => {
+    router.push("/add-blog");
+  };
+
+  const handleEditBlogButton = (id) => {
+    router.push(`/update-blog/?id=${id}`);
+  };
+
+  const handleViewBlogButton = (id) => {
+    router.push(`/view-blog/?id=${id}`);
+  }
+
   return (
     <div>
-      <button className=" text-white  bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-8 py-2 my-6 mx-3 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-75 disabled:hover:bg-primary-600 ">
+      <button
+        onClick={handleAddBlogButton}
+        className=" text-white  bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-8 py-2 my-6 mx-3 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-75 disabled:hover:bg-primary-600 "
+      >
         Add a New Blog
       </button>
       <div className="relative overflow-x-auto">
@@ -53,13 +72,18 @@ export default function Home() {
                 Author
               </th>
               <th scope="col" className="px-6 py-3">
+                Summary
+              </th><th scope="col" className="px-6 py-3">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
             {blogs.map((blog) => (
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <tr
+                key={blog._id}
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+              >
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -67,8 +91,18 @@ export default function Home() {
                   {blog.title}
                 </th>
                 <td className="px-6 py-4">{blog.author}</td>
+                <td className="px-6 py-4 w-1/3 max-w-xs truncate">{blog.content}</td>
                 <td className="px-6 py-4">
-                  <button className=" text-white  bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-xs px-4 py-1 mx-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-75 disabled:hover:bg-primary-600 ">
+                <button
+                    onClick={() => handleViewBlogButton(blog._id)}
+                    className=" text-white  bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-xs px-4 py-1 mx-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-75 disabled:hover:bg-primary-600 "
+                  >
+                    View
+                  </button>
+                  <button
+                    onClick={() => handleEditBlogButton(blog._id)}
+                    className=" text-white  bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-xs px-4 py-1 mx-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-75 disabled:hover:bg-primary-600 "
+                  >
                     Edit
                   </button>
                   <button
@@ -80,16 +114,6 @@ export default function Home() {
                 </td>
               </tr>
             ))}
-            {/* <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Microsoft Surface Pro
-              </th>
-              <td className="px-6 py-4">White</td>
-              <td className="px-6 py-4">Laptop PC</td>
-            </tr> */}
           </tbody>
         </table>
       </div>
